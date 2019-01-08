@@ -1,1 +1,72 @@
 
+# priv esc enumeration scripts
+https://github.com/rebootuser/LinEnum
+https://github.com/reider-roque/linpostexp/blob/master/linprivchecker.py
+http://pentestmonkey.net/tools/audit/unix-privesc-check
+
+# Kernel and OS
+uname -a
+uname -mrs
+cat /etc/issue
+cat /etc/lsb-release      # Debian based
+cat /etc/redhat-release   # Redhat based
+
+# running services and find services run boy root
+ps aux
+ps aux | grep root
+
+# which applications are installed
+dpkg -l
+ls -alh /usr/bin/
+ls -alh /sbin/
+
+# scheduled tasks
+crontab -l
+
+# port forwarding
+ssh -L 8080:127.0.0.1:80 root@192.168.1.7    # Local Port
+ssh -R 8080:127.0.0.1:80 root@192.168.1.7    # Remote Port
+
+# tunneling
+ssh -D 127.0.0.1:9050 -N [username]@[ip]
+proxychains ifconfig
+
+# sensitive files
+cat /etc/passwd
+cat /etc/group
+cat /etc/shadow
+ls -alh /var/mail/
+
+# check home dirs
+ls -ahlR /root/
+ls -ahlR /home
+
+# private key search
+cat ~/.ssh/authorized_keys
+cat ~/.ssh/identity.pub
+cat ~/.ssh/identity
+cat ~/.ssh/id_rsa.pub
+cat ~/.ssh/id_rsa
+cat ~/.ssh/id_dsa.pub
+cat ~/.ssh/id_dsa
+cat /etc/ssh/ssh_config
+cat /etc/ssh/sshd_config
+cat /etc/ssh/ssh_host_dsa_key.pub
+cat /etc/ssh/ssh_host_dsa_key
+cat /etc/ssh/ssh_host_rsa_key.pub
+cat /etc/ssh/ssh_host_rsa_key
+cat /etc/ssh/ssh_host_key.pub
+cat /etc/ssh/ssh_host_key
+
+
+# Sticky Bits & SUID & GUID
+
+find / -perm -1000 -type d 2>/dev/null   # Sticky bit - Only the owner of the directory or the owner of a file can delete or rename here.
+find / -perm -g=s -type f 2>/dev/null    # SGID (chmod 2000) - run as the group, not the user who started it.
+find / -perm -u=s -type f 2>/dev/null    # SUID (chmod 4000) - run as the owner, not the user who started it.
+find / -perm -g=s -o -perm -u=s -type f 2>/dev/null    # SGID or SUID
+
+
+
+
+
