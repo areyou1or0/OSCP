@@ -17,6 +17,7 @@ nmap -sT -sV -A -O -v -p 1–65535 <targetip>
 nmap -sV -sC -v -oA output <targetip>
 nmap -p- -v <targetip>
 
+
 ------------------------
 
 SMB
@@ -60,6 +61,9 @@ rpcclient $> lookupnames administrators
 rpcclient> querydominfo
 rpcclient> enumdomusers
 rpcclient> queryuser john
+
+# scan for vulnerabilities with nmap
+nmap --script "vuln" <targetip> -p139,445
 
 ------------------------
 
