@@ -47,11 +47,11 @@ nc $victimip 55555 < file
 Extra:
 To send the executable file to your machine:
 
-cat filenmae | base64 -w 0
+base64 executable
 # copy the output
-# paste it in a file in Kali
+# paste it in a file called file.txt
 # decode it and create the executable
-cat file.txt | base64 -d > executable
+base64 -d file.txt > executable
 
 
 
