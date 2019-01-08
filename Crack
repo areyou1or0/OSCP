@@ -5,7 +5,6 @@ wc -l cewl.txt
 john --wordlist=cewl.txt --rules --stdout > mutated.txt
 wc mutated.txt
 
-
 -----------------------------------
 
 Hydra
