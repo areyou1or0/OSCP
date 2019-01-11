@@ -41,10 +41,14 @@ hashcat -m 3000  hashes --rules --wordlist=/usr/share/wordlists/rockyou.txt
 
 https://hashkiller.co.uk/
 
----------------------
+------------------------------------------
 
 When you find some digits, check if it's 32 bit
 echo -n ....... | wc -c
+
+------------------------------------------
+John
+john hashes.txt --rules --wordlist=/usr/share/wordlists/rockyou.txt 
 
 
 
