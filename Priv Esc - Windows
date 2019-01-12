@@ -41,6 +41,7 @@ Weak permissions
 # this example is for XP SP0
 # upload accesschk.exe to a writable directory first 
 # for XP version 5.2 of accesschk.exe is needed
+https://web.archive.org/web/20080530012252/http://live.sysinternals.com/accesschk.exe 
 
 # check for serices with weak permissions
 accesschk.exe -uwcqv "Authenticated Users" * /accepteula
