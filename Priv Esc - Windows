@@ -53,7 +53,7 @@ sc config upnphost obj= ".\LocalSystem" password= ""
 # check the status now
 sc qc upnphost
 # change start option as AUTO-START 
-sc config SSDPSRV start=auto
+sc config SSDPSRV start= auto
 #start the services
 net start SSDPSRV
 net stop upnphost
