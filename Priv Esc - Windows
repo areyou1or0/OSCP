@@ -142,6 +142,8 @@ Place common.exe in ‘C:\Program Files\Unquoted Path Service’.
 sc start unquotedsrvc
 net localgroup Administrators
 
+shutdown -r -t 10
+
 -----------------------------------
 # psexec using found credentials
 # first upload nc.exe to a writable directory
